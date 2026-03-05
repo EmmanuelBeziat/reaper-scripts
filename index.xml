@@ -2,8 +2,8 @@
 <index version="1" name="EmmanuelBeziat">
 	<category name="Regions">
 		<reapack name="Region to time selection" type="script" desc="Create a time selection from current region">
-			<version name="1.0.3" author="Emmanuel Béziat" time="2025-02-02T00:00:00Z">
-				<source main="main" file="EB_Create time selection from current region.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-sripts/main/EB_Create time selection from current region.lua</source>
+			<version name="1.0.4" author="Emmanuel Béziat" time="2025-02-02T00:00:00Z">
+				<source main="main" file="Create time selection from current region.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-sripts/main/Create%20time%20selection%20from%20current%20region.lua</source>
 				<changelog><![CDATA[Initial Release]]></changelog>
 			</version>
 		</reapack>

@@ -6,4 +6,4 @@ ReaPack scripts for REAPER.
 
 | Script | Description |
 |--------|-------------|
-| EB - Create time selection from current region.lua | Creates a time selection from the region at the current position (playhead when playing, edit cursor when stopped). With overlapping regions, uses the one with the closest start. |
+| Create time selection from current region.lua | Creates a time selection from the region at the current position (playhead when playing, edit cursor when stopped). With overlapping regions, uses the one with the closest start. |
