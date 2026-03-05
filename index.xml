@@ -10,12 +10,12 @@
 	</category>
 	<category name="Various">
 		<reapack name="Band Record" type="script" desc="Set of actions for recording a band.">
-			<version name="1.0.0" author="Emmanuel Béziat" time="2026-03-05T00:00:00Z">
-				<source main="main" file="BR_Create Records Tracks.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/BR_Create%20Records%20Tracks.lua</source>
-				<source main="main" file="BR_Records Tracks.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/BR_Records%20Tracks.lua</source>
+			<version name="1.0.1" author="Emmanuel Béziat" time="2026-03-05T00:00:00Z">
+				<source main="main" file="BR_Create Record Tracks.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/BR_Create%20Record%20Tracks.lua</source>
+				<source main="main" file="BR_Record Tracks.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/BR_Record%20Tracks.lua</source>
 				<source main="main" file="BR_Remove Recorded Items.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/BR_Remove%20Recorded%20Items.lua</source>
 				<source main="main" file="BR_Render Tracks.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/BR_Render%20Tracks.lua</source>
-				<source main="main" file="BR_Delete Records Tracks.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/BR_Delete%20Records%20Tracks.lua</source>
+				<source main="main" file="BR_Delete Record Tracks.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/BR_Delete%20Record%20Tracks.lua</source>
 				<source file="utils/BR_Utils.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/utils/BR_Utils.lua</source>
 				<changelog><![CDATA[Initial Release]]></changelog>
 			</version>

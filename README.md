@@ -14,6 +14,17 @@ ReaPack scripts for REAPER.
 
 Set of ReaScripts for recording a band in REAPER.
 
+## Scripts
+
+| Step | Script                 | Action                          |
+|------|------------------------|---------------------------------|
+| 1    | **BR_Create Record Tracks** | Add Record group from template |
+| 2    | **BR_Record Tracks** | Arm, mute monitor, start record |
+| 3    | **BR_Remove Recorded Items** | Clear items on Record (optional) |
+| 4    | **BR_Render Tracks** | Render stems to `Records\<date>` |
+| 5    | **BR_Delete Record Tracks** | Delete Record track and subtracks (optional) |
+
+
 ## Process
 
 The workflow follows four main steps:
@@ -67,18 +78,3 @@ Use this when you want to wipe a take and record again without removing the Reco
 
 Use this when you want to remove the Records group entirely (e.g. at the end of a session).
 
----
-
-## Summary
-
-| Step | Script                 | Action                          |
-|------|------------------------|---------------------------------|
-| 1    | **BR_Create Records Tracks**       | Add Records group from template |
-| 2    | **BR_Record Tracks**       | Arm, mute monitor, start record |
-| 3    | **BR_Remove Recorded Items** | Clear items on Records (optional) |
-| 4    | **BR_Render Tracks**       | Render stems to `Records\<date>` |
-| 5    | **BR_Delete Records Tracks** | Delete Records track and subtracks (optional) |
-
-## Installation
-
-Install via [ReaPack](https://reapack.com/) using the Band Record repository, or copy the scripts (and `utils/Utils.lua`) into your REAPER Scripts folder. Add the scripts to the Actions list and assign shortcuts or toolbar buttons as needed.
