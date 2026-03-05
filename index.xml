@@ -3,7 +3,7 @@
 	<category name="Regions">
 		<reapack name="Region to time selection" type="script" desc="Create a time selection from current region">
 			<version name="1.0.0" author="Emmanuel Béziat" time="2025-02-02T00:00:00Z">
-				<source main="main" file="EB - Create time selection from current region.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-sripts/main/CreateRegion.lua</source>
+				<source main="main" file="EB - Create time selection from current region.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-sripts/main/EB - Create time selection from current region.lua</source>
 				<changelog><![CDATA[Initial Release]]></changelog>
 			</version>
 		</reapack>
