@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <index version="1" name="EmmanuelBeziat">
 	<category name="Regions">
-		<reapack name="Region to time selection" type="script" desc="Reascript to create a time selection from current region.">
-			<version name="0.1.1" author="Emmanuel Béziat" time="2025-02-02T00:00:00Z">
-				<source main="main" file="CreateRegion.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-region-to-time-selection/main/CreateRegion.lua</source>
+		<reapack name="Region to time selection" type="script" desc="Create a time selection from current region">
+			<version name="0.1.2" author="Emmanuel Béziat" time="2025-02-02T00:00:00Z">
+				<source main="main" file="CreateRegion.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-sripts/main/CreateRegion.lua</source>
 				<changelog><![CDATA[Initial Release]]></changelog>
 			</version>
 		</reapack>
 	</category>
 	<metadata>
-		<link rel="website">https://github.com/EmmanuelBeziat/reaper-region-to-time-selection</link>
-		<description><![CDATA[{\rtf1 {\fonttbl {\f0 Helvetica;}} \f0\fs60 Reascript to create a time selection from current region.}]]></description>
+		<link rel="website">https://github.com/EmmanuelBeziat/reaper-scripts</link>
+		<description><![CDATA[{\rtf1 {\fonttbl {\f0 Helvetica;}} \f0\fs60 Create a time selection from current region}]]></description>
 	</metadata>
 </index>
