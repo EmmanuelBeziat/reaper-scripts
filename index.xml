@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="0.1.0" name="EmmanuelBeziat">
+<index version="1.0.0" name="EmmanuelBeziat">
 	<category name="EmmanuelBeziat">
 		<reapack name="Region to time selection" type="script" desc="Reascript to create a time selection from current region.">
 			<version name="0.1.0" author="Emmanuel Béziat" time="2025-02-02T00:00:00Z">
