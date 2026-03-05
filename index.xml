@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1.0.0" name="EmmanuelBeziat">
-	<category name="EmmanuelBeziat">
+<index version="1" name="EmmanuelBeziat">
+	<category name="Regions">
 		<reapack name="Region to time selection" type="script" desc="Reascript to create a time selection from current region.">
-			<version name="0.1.0" author="Emmanuel Béziat" time="2025-02-02T00:00:00Z">
+			<version name="0.1.1" author="Emmanuel Béziat" time="2025-02-02T00:00:00Z">
 				<source main="main" file="CreateRegion.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-region-to-time-selection/main/CreateRegion.lua</source>
 				<changelog><![CDATA[Initial Release]]></changelog>
 			</version>
