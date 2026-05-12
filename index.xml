@@ -23,8 +23,8 @@
 	</category>
 	<category name="MIDI">
     <reapack name="Helix MIDI" type="script" desc="MIDI control of Line6 Helix Presets and snapshots in Reaper.">
-      <version name="0.0.5" author="Emmanuel Béziat" time="2026-05-13T12:00:00Z">
-				<source>https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/helix-midi/helix-midi.lua</source>
+      <version name="0.0.6" author="Emmanuel Béziat" time="2026-05-13T12:00:00Z">
+				<source main="Helix MIDI" file="helix-midi/helix-midi.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/helix-midi/helix-midi.lua</source>
 				<changelog><![CDATA[Initial Release]]></changelog>
       </version>
     </reapack>
