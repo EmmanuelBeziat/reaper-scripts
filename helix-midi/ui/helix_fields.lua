@@ -167,5 +167,13 @@ return function(Config, callbacks)
 		HelixFields._mouse_was_down = down
 	end
 
+	function HelixFields.get_values()
+		local out = {}
+		for _, row in ipairs(fields) do
+			out[row.key] = row.value
+		end
+		return out
+	end
+
 	return HelixFields
 end

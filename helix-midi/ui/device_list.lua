@@ -1,7 +1,5 @@
 -- MIDI Device List UI component
-return function(Config)
-  local MIDI = dofile(Config.script_path .. "core/midi.lua")
-
+return function(Config, MIDI)
   local DeviceList = {
     x = Config.device_list.x,
     y = Config.device_list.y,

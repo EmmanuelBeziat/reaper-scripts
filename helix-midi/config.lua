@@ -36,6 +36,12 @@ local Config = {
     wheel_pixels_per_notch = 80
   },
 
+  -- Must match Helix : Global Settings > MIDI/Tempo > MIDI Base Channel (1–16).
+  -- ReaScript cannot read this value from the Helix (not exposed on standard MIDI).
+  midi = {
+    base_channel = 4
+  },
+
   button = {
     x = 50,
     y = 290,

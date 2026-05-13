@@ -9,8 +9,8 @@ package.path = Config.script_path .. "?.lua;" .. package.path
 
 -- Import modules
 local Window = dofile(Config.script_path .. "ui/window.lua")(Config)
-local Button = dofile(Config.script_path .. "ui/button.lua")(Config)
-local DeviceList = dofile(Config.script_path .. "ui/device_list.lua")(Config)
+local MIDI = dofile(Config.script_path .. "core/midi.lua")(Config)
+local DeviceList = dofile(Config.script_path .. "ui/device_list.lua")(Config, MIDI)
 
 local function on_setlist_change(value)
 end
@@ -31,33 +31,13 @@ local HelixFields = dofile(Config.script_path .. "ui/helix_fields.lua")(Config, 
   on_expression_pedal1_change = on_expression_pedal1_change,
 })
 
-local MIDI = dofile(Config.script_path .. "core/midi.lua")
+local Button = dofile(Config.script_path .. "ui/button.lua")(Config, HelixFields, MIDI)
 
 -- Initialize window
 Window.init()
 
 -- Initialize device list
 DeviceList.init()
-
-function create_midi_block()
-  local track = reaper.GetSelectedTrack(0, 0)
-  if not track then
-    reaper.ShowMessageBox("Please select a track first!", "Error", 0)
-    return
-  end
-
-  local cursor_pos = reaper.GetCursorPosition()
-  local proj = 0
-  local _, num, denom = reaper.TimeMap_GetTimeSigAtTime(proj, cursor_pos)
-  local qn = reaper.TimeMap2_timeToQN(proj, cursor_pos)
-  local qn_end = qn + num -- 1 measure
-  local end_pos = reaper.TimeMap2_QNToTime(proj, qn_end)
-
-  local item = reaper.CreateNewMIDIItemInProj(track, cursor_pos, end_pos, false)
-  if not item then
-    reaper.ShowMessageBox("Failed to create MIDI item.", "Error", 0)
-  end
-end
 
 function main()
   -- Draw background

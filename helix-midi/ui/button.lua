@@ -1,7 +1,5 @@
 -- Button UI element
-return function(Config)
-  local MIDI = dofile(Config.script_path .. "core/midi.lua")
-
+return function(Config, HelixFields, MIDI)
   local Button = {
     x = Config.button.x,
     y = Config.button.y,
@@ -29,7 +27,7 @@ return function(Config)
       if mx > Button.x and mx < Button.x + Button.width and
         my > Button.y and my < Button.y + Button.height then
         if not Button.is_down then
-          MIDI.create_midi_block()
+          MIDI.create_helix_item_at_cursor(HelixFields.get_values())
           Button.is_down = true
         end
       end
