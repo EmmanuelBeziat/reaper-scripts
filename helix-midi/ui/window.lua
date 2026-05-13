@@ -23,7 +23,7 @@ return function(Config)
 		return gfx.getchar() < 0
 	end
 
-	function Wdndow.close()
+	function Window.close()
 		gfx.quit()
 	end
 
