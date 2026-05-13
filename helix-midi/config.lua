@@ -1,7 +1,10 @@
+-- Directory containing this file (trailing slash), for dofile / package.path
+local config_file = (debug.getinfo(1, "S").source):gsub("^@", ""):gsub("\\", "/")
+local script_dir = (config_file:match("^(.+)/[^/]*$") or ".") .. "/"
+
 local Config = {
   -- Paths
-  script_path = (debug.getinfo(1, "S").source):gsub("^@", ""):gsub("\\", "/")
-	script_dir = script_path:match("^(.+)/[^/]*$") or "."
+  script_path = script_dir,
 
   -- Window settings
   window = {

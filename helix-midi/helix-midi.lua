@@ -1,9 +1,10 @@
 -- helix-in-reaper.lua
 -- Basic GUI with a button to create a MIDI block at the cursor position
 
--- Main script
-local script_path = (debug.getinfo(1, "S").source):gsub("^@", ""):gsub("\\", "/")
-local Config = dofile(script_path .. "config.lua")
+-- Main script: debug path is .../helix-midi.lua; strip filename before loading config.lua
+local script_file = (debug.getinfo(1, "S").source):gsub("^@", ""):gsub("\\", "/")
+local script_dir = (script_file:match("^(.+)/[^/]*$") or ".") .. "/"
+local Config = dofile(script_dir .. "config.lua")
 package.path = Config.script_path .. "?.lua;" .. package.path
 
 -- Import modules
