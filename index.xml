@@ -23,7 +23,7 @@
 	</category>
 	<category name="MIDI">
     <reapack name="Helix MIDI" type="script" desc="MIDI control of Line6 Helix Presets and snapshots in Reaper.">
-      <version name="0.0.11" author="Emmanuel Béziat" time="2026-05-13T12:00:00Z">
+      <version name="0.0.12" author="Emmanuel Béziat" time="2026-05-13T12:00:00Z">
 				<source main="Helix MIDI" file="helix-midi/helix-midi.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/helix-midi/helix-midi.lua</source>
 				<source file="helix-midi/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/helix-midi/config.lua</source>
 				<source file="helix-midi/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/helix-midi/ui/window.lua</source>
@@ -31,7 +31,7 @@
 				<source file="helix-midi/ui/device_list.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/helix-midi/ui/device_list.lua</source>
 				<source file="helix-midi/ui/helix_fields.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/helix-midi/ui/helix_fields.lua</source>
 				<source file="helix-midi/core/midi.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/helix-midi/core/midi.lua</source>
-				<changelog><![CDATA[Add helix_fields UI module to package; include in ReaPack manifest.]]></changelog>
+				<changelog><![CDATA[Helix fields: scrub value by horizontal drag; mouse wheel over value for 0–127 fields. Config tuning for scrub and wheel.]]></changelog>
       </version>
     </reapack>
   </category>
