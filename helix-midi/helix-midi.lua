@@ -11,6 +11,26 @@ package.path = Config.script_path .. "?.lua;" .. package.path
 local Window = dofile(Config.script_path .. "ui/window.lua")(Config)
 local Button = dofile(Config.script_path .. "ui/button.lua")(Config)
 local DeviceList = dofile(Config.script_path .. "ui/device_list.lua")(Config)
+
+local function on_setlist_change(value)
+end
+
+local function on_preset_change(value)
+end
+
+local function on_snapshot_change(value)
+end
+
+local function on_expression_pedal1_change(value)
+end
+
+local HelixFields = dofile(Config.script_path .. "ui/helix_fields.lua")(Config, {
+  on_setlist_change = on_setlist_change,
+  on_preset_change = on_preset_change,
+  on_snapshot_change = on_snapshot_change,
+  on_expression_pedal1_change = on_expression_pedal1_change,
+})
+
 local MIDI = dofile(Config.script_path .. "core/midi.lua")
 
 -- Initialize window
@@ -46,6 +66,9 @@ function main()
   -- Draw and handle device list
   DeviceList.draw()
   DeviceList.handle_click()
+
+  HelixFields.draw()
+  HelixFields.handle_click()
 
   -- Draw and handle button
   Button.draw()

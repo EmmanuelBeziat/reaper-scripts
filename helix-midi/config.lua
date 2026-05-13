@@ -10,7 +10,7 @@ local Config = {
   window = {
     title = "Helix MIDI",
     width = 300,
-    height = 300
+    height = 340
   },
 
   -- UI element positions and sizes
@@ -21,9 +21,20 @@ local Config = {
     height = 100
   },
 
+  -- Setlist / Preset / Snapshot / Expression (rows below device status)
+  helix_fields = {
+    x = 20,
+    y = 72,
+    label_width = 130,
+    value_width = 44,
+    row_height = 28,
+    button_width = 26,
+    button_gap = 6
+  },
+
   button = {
     x = 50,
-    y = 250,
+    y = 290,
     width = 200,
     height = 40,
     text = "Create MIDI Block"
