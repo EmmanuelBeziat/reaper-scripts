@@ -1,10 +1,10 @@
 -- @description Open Check Hardware dockable window
--- @version 1.0.6
+-- @version 1.0.7
 -- @author Emmanuel Béziat
 -- @provides
 --   [main] .
 -- @changelog
---    # Clean UI: large bold device name, theme background, no debug list
+--    # Fix ReaImGui font API (CreateFont family+size, PushFont 2 args)
 
 local script_file = (debug.getinfo(1, "S").source):gsub("^@", ""):gsub("\\", "/")
 local script_dir = (script_file:match("^(.+)/[^/]*$") or ".") .. "/"

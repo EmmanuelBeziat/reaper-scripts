@@ -20,7 +20,7 @@ return function(Config, ReaImGui, MidiOutput, device_font)
 				r, g, b = Config.colors.error[1], Config.colors.error[2], Config.colors.error[3]
 			end
 
-			ReaImGui.call("PushFont", ctx, device_font, Config.ui.device_font_size)
+			ReaImGui.call("PushFont", ctx, device_font)
 			ReaImGui.call("TextColored", ctx, color_u32(r, g, b, 1), display_name)
 			ReaImGui.call("PopFont", ctx)
 		end
