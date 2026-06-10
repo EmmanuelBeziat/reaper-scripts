@@ -1,23 +1,25 @@
-return function(Config, ctx)
+return function(Config, ReaImGui, ctx)
 	local Window = {}
 
 	function Window.draw()
-		reaper.ImGui_SetNextWindowDockID(
+		ReaImGui.call(
+			"SetNextWindowDockID",
 			ctx,
 			Config.window.default_dock_id,
-			reaper.ImGui_Cond_FirstUseEver()
+			ReaImGui.flag("Cond_FirstUseEver")
 		)
 
-		local visible, open = reaper.ImGui_Begin(
+		local visible, open = ReaImGui.call(
+			"Begin",
 			ctx,
 			Config.window.title,
 			true,
-			reaper.ImGui_WindowFlags_NoCollapse()
+			ReaImGui.flag("WindowFlags_NoCollapse")
 		)
 
 		if visible then
-			reaper.ImGui_Text(ctx, "Hardware check")
-			reaper.ImGui_End(ctx)
+			ReaImGui.call("Text", ctx, "Hardware check")
+			ReaImGui.call("End", ctx)
 		end
 
 		return open

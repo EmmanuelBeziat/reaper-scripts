@@ -58,24 +58,26 @@ Ce n’est **pas** une action one-shot.
 
 ### 1. Vérifier ReaImGui au démarrage
 
-`core/reaimgui.lua` teste `reaper.ImGui_CreateContext` et charge optionnellement le shim API :
+`core/reaimgui.lua` teste `reaper.ImGui_CreateContext` et charge le shim **intégré** à ReaImGui (si disponible) :
 
 ```lua
-local shim_path = reaper.GetResourcePath() .. "/Scripts/ReaTeam Extensions/API/imgui.lua"
-if reaper.file_exists(shim_path) then
-	dofile(shim_path)("0.9")
+if reaper.ImGui_GetBuiltinPath then
+	package.path = reaper.ImGui_GetBuiltinPath() .. "/?.lua;" .. package.path
+	local ImGui = require("imgui") "0.9"
 end
 ```
 
-Le shim expose une API `ImGui.*` plus lisible ; les appels `reaper.ImGui_*` fonctionnent aussi sans shim.
+Ne pas charger l’ancien shim `Scripts/ReaTeam Extensions/API/imgui.lua` : il peut entrer en conflit avec les noms d’API récents.
 
 ### 2. Créer le contexte avec le docking activé
 
 ```lua
-local ctx = reaper.ImGui_CreateContext("Check Hardware", reaper.ImGui_ConfigFlags_DockEnable())
+local ctx = reaper.ImGui_CreateContext("Check Hardware", reaper.ImGui_ConfigFlags_DockingEnable())
 ```
 
-Sans `ConfigFlags_DockEnable`, la fenêtre ne pourra pas s’ancrer.
+> **Attention** : le flag s’appelle `ConfigFlags_DockingEnable`, pas `ConfigFlags_DockEnable` (qui n’existe pas et provoque une erreur).
+
+Sans ce flag, la fenêtre ne pourra pas s’ancrer.
 
 ### 3. Positionner la fenêtre dans un docker (première ouverture)
 
@@ -143,12 +145,12 @@ Catégorie **Various** (ou nouvelle catégorie si besoin). Lister **tous** les f
 
 ```xml
 <reapack name="Check Hardware" type="script" desc="Dockable panel to check audio/MIDI hardware.">
-	<version name="1.0.0" author="Emmanuel Béziat" time="2026-06-10T00:00:00Z">
+	<version name="1.0.1" author="Emmanuel Béziat" time="2026-06-10T12:00:00Z">
 		<source main="Check Hardware" file="check-hardware/check-hardware.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/check-hardware.lua</source>
 		<source file="check-hardware/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/config.lua</source>
 		<source file="check-hardware/core/reaimgui.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/reaimgui.lua</source>
 		<source file="check-hardware/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/window.lua</source>
-		<changelog><![CDATA[Initial release — dockable window shell.]]></changelog>
+		<changelog><![CDATA[Fix ReaImGui docking flag (ConfigFlags_DockingEnable).]]></changelog>
 	</version>
 </reapack>
 ```
@@ -158,10 +160,27 @@ Catégorie **Various** (ou nouvelle catégorie si besoin). Lister **tous** les f
 
 ### Test local
 
-1. Copier `check-hardware/` dans le dossier Scripts REAPER, ou synchroniser via ReaPack depuis le dépôt
-2. **Actions > Show action list** → chercher « Check Hardware »
-3. Lancer l’action — la fenêtre s’ouvre
-4. Glisser l’onglet vers un docker (mixer, etc.) pour vérifier le docking
+#### Enregistrer l’action dans REAPER
+
+« ReaScript: Load » exécute le script une fois **sans** l’ajouter à la liste d’actions. Pour disposer d’une action permanente :
+
+1. **Via ReaPack** (recommandé) : ajouter le dépôt comme source ReaPack, synchroniser, installer le paquet *Check Hardware*
+2. **Copie manuelle** : placer `check-hardware/` dans `{ResourcePath}/Scripts/` (ex. `Scripts/reaper-scripts/check-hardware/`), puis **redémarrer REAPER** ou rescanner les scripts
+
+Ensuite : **Actions > Show action list** → chercher « Check Hardware ».
+
+#### Vérifier le panneau
+
+1. Lancer l’action — la fenêtre s’ouvre
+2. Glisser l’onglet vers un docker (mixer, etc.) pour vérifier le docking
+
+#### Dépannage
+
+| Problème | Cause probable | Solution |
+|----------|----------------|----------|
+| Action absente de la liste | Script chargé via « Load » uniquement | Installer via ReaPack ou copier dans `Scripts/` + redémarrage |
+| `ConfigFlags_DockEnable` nil | Mauvais nom de constante | Utiliser `ConfigFlags_DockingEnable` |
+| Erreur dans `imgui.lua` | Ancien shim ReaTeam incompatible | Utiliser `ImGui_GetBuiltinPath()` + `require('imgui')` |
 
 ---
 
