@@ -8,7 +8,11 @@ if not ReaImGui.ensure() then
 end
 
 local MidiOutput = dofile(Config.script_path .. "core/midi_output.lua")(Config)
-local MidiOutputsUi = dofile(Config.script_path .. "ui/midi_outputs.lua")(Config, ReaImGui, MidiOutput)
+local ctx = ReaImGui.create_context(Config.window.title)
+local device_font = ReaImGui.call("CreateFont", Config.ui.device_font_size, ReaImGui.flag("FontFlags_Bold"))
+ReaImGui.call("Attach", ctx, device_font)
+
+local MidiOutputsUi = dofile(Config.script_path .. "ui/midi_outputs.lua")(Config, ReaImGui, MidiOutput, device_font)
 
 local function set_button_state(set)
 	local _, _, sec, cmd = reaper.get_action_context()
@@ -20,7 +24,6 @@ local function exit()
 	set_button_state(0)
 end
 
-local ctx = ReaImGui.create_context(Config.window.title)
 local Window = dofile(Config.script_path .. "ui/window.lua")(Config, ReaImGui, ctx, MidiOutputsUi)
 
 local function run()
