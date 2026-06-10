@@ -33,13 +33,12 @@ ReaImGui n’est **pas** listé dans `index.xml` du dépôt : c’est une dépen
 Exemple `check-hardware/` :
 
 ```
+Check Hardware.lua          # Point d’entrée ReaPack (action dans la liste REAPER)
 check-hardware/
-├── check-hardware.lua    # Point d’entrée (action toggle)
-├── config.lua            # Chemins et réglages fenêtre
-├── core/
-│   └── reaimgui.lua      # Vérification ReaImGui + shim API
-└── ui/
-    └── window.lua        # Boucle ImGui (Begin / contenu / End)
+├── run.lua                 # Logique (sans en-tête @description)
+├── config.lua
+├── core/reaimgui.lua
+└── ui/window.lua
 ```
 
 ### Type de script : toggle + defer
@@ -139,23 +138,34 @@ Assigner l’action à une **toolbar** ou un raccourci en mode toggle pour un co
 
 ## Publication ReaPack
 
+### Enregistrement de l’action
+
+ReaPack n’enregistre une action que si :
+
+1. L’attribut `main` vaut **`main`** (ou une section valide : `midi_editor`, etc.) — **pas** un nom libre comme `Check Hardware`
+2. Le script d’entrée a un en-tête `@description` et `@provides [main] .`
+3. Les modules internes (`run.lua`, `config.lua`, …) sont listés **sans** attribut `main`
+
+Dans ce dépôt, le point d’entrée est à la **racine** (`Check Hardware.lua`), comme les scripts Band Record — le dossier `check-hardware/` ne contient que l’implémentation.
+
 ### Entrée dans `index.xml`
 
 Catégorie **Various** (ou nouvelle catégorie si besoin). Lister **tous** les fichiers chargés via `dofile` :
 
 ```xml
 <reapack name="Check Hardware" type="script" desc="Dockable panel to check audio/MIDI hardware.">
-	<version name="1.0.1" author="Emmanuel Béziat" time="2026-06-10T12:00:00Z">
-		<source main="Check Hardware" file="check-hardware/check-hardware.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/check-hardware.lua</source>
+	<version name="1.0.2" author="Emmanuel Béziat" time="2026-06-10T18:00:00Z">
+		<source main="main" file="Check Hardware.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Check%20Hardware.lua</source>
+		<source file="check-hardware/run.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/run.lua</source>
 		<source file="check-hardware/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/config.lua</source>
 		<source file="check-hardware/core/reaimgui.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/reaimgui.lua</source>
 		<source file="check-hardware/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/window.lua</source>
-		<changelog><![CDATA[Fix ReaImGui docking flag (ConfigFlags_DockingEnable).]]></changelog>
+		<changelog><![CDATA[Fix action registration.]]></changelog>
 	</version>
 </reapack>
 ```
 
-- Point d’entrée : `main="Check Hardware"` (nom de l’action dans REAPER)
+- Point d’entrée : `main="main"` + `@description` → nom affiché dans la liste d’actions
 - Modules : `<source file="...">` sans attribut `main`
 
 ### Test local
@@ -178,7 +188,7 @@ Ensuite : **Actions > Show action list** → chercher « Check Hardware ».
 
 | Problème | Cause probable | Solution |
 |----------|----------------|----------|
-| Action absente de la liste | Script chargé via « Load » uniquement | Installer via ReaPack ou copier dans `Scripts/` + redémarrage |
+| Action absente de la liste | `main="Check Hardware"` invalide ou script hors `Scripts/` | `main="main"` + script racine ; installer via ReaPack ou copier dans `Scripts/` + redémarrage |
 | `ConfigFlags_DockEnable` nil | Mauvais nom de constante | Utiliser `ConfigFlags_DockingEnable` |
 | Erreur dans `imgui.lua` | Ancien shim ReaTeam incompatible | Utiliser `ImGui_GetBuiltinPath()` + `require('imgui')` |
 
