@@ -7,6 +7,9 @@ if not ReaImGui.ensure() then
 	return
 end
 
+local MidiOutput = dofile(Config.script_path .. "core/midi_output.lua")(Config)
+local MidiOutputsUi = dofile(Config.script_path .. "ui/midi_outputs.lua")(Config, ReaImGui, MidiOutput)
+
 local function set_button_state(set)
 	local _, _, sec, cmd = reaper.get_action_context()
 	reaper.SetToggleCommandState(sec, cmd, set or 0)
@@ -18,7 +21,7 @@ local function exit()
 end
 
 local ctx = ReaImGui.create_context(Config.window.title)
-local Window = dofile(Config.script_path .. "ui/window.lua")(Config, ReaImGui, ctx)
+local Window = dofile(Config.script_path .. "ui/window.lua")(Config, ReaImGui, ctx, MidiOutputsUi)
 
 local function run()
 	local open = Window.draw()

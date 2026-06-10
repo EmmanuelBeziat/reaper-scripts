@@ -6,8 +6,20 @@ local Config = {
 
 	window = {
 		title = "Check Hardware",
-		-- REAPER docker index on first open (-1 = first docker, 0 = floating)
 		default_dock_id = -1,
+	},
+
+	midi_outputs = {
+		{
+			id = 1,
+			name = "LINE 6 - HELIX",
+			label = "MIDI Output",
+		},
+	},
+
+	colors = {
+		ok = { 0, 204, 0 },
+		error = { 204, 0, 0 },
 	},
 }
 

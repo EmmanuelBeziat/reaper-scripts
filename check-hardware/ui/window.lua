@@ -1,4 +1,4 @@
-return function(Config, ReaImGui, ctx)
+return function(Config, ReaImGui, ctx, MidiOutputsUi)
 	local Window = {}
 
 	function Window.draw()
@@ -19,6 +19,8 @@ return function(Config, ReaImGui, ctx)
 
 		if visible then
 			ReaImGui.call("Text", ctx, "Hardware check")
+			ReaImGui.call("Separator", ctx)
+			MidiOutputsUi.draw(ctx)
 			ReaImGui.call("End", ctx)
 		end
 
