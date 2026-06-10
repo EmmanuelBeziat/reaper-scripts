@@ -61,24 +61,6 @@
 				<source file="check-hardware/ui/midi_outputs.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/midi_outputs.lua</source>
 				<changelog><![CDATA[Debug console log and full MIDI output list; fix status text display.]]></changelog>
 			</version>
-			<version name="1.0.3" author="Emmanuel Béziat" time="2026-06-11T00:00:00Z">
-				<source main="main" file="Check Hardware.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Check%20Hardware.lua</source>
-				<source file="check-hardware/run.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/run.lua</source>
-				<source file="check-hardware/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/config.lua</source>
-				<source file="check-hardware/core/reaimgui.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/reaimgui.lua</source>
-				<source file="check-hardware/core/midi_output.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/midi_output.lua</source>
-				<source file="check-hardware/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/window.lua</source>
-				<source file="check-hardware/ui/midi_outputs.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/midi_outputs.lua</source>
-				<changelog><![CDATA[Display Helix MIDI output status (LINE 6 - HELIX, device ID 1).]]></changelog>
-			</version>
-			<version name="1.0.2" author="Emmanuel Béziat" time="2026-06-10T18:00:00Z">
-				<source main="main" file="Check Hardware.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Check%20Hardware.lua</source>
-				<source file="check-hardware/run.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/run.lua</source>
-				<source file="check-hardware/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/config.lua</source>
-				<source file="check-hardware/core/reaimgui.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/reaimgui.lua</source>
-				<source file="check-hardware/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/window.lua</source>
-				<changelog><![CDATA[Fix action registration: root entry point and main="main" in index.xml.]]></changelog>
-			</version>
 		</reapack>
 	</category>
 	<category name="MIDI">
