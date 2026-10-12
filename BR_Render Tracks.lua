@@ -1,12 +1,9 @@
 -- @description Render 'Records' group as stems
--- @version 1.1.0
+-- @version 1.2.0
 -- @author Emmanuel Béziat
 -- @changelog
---    # Render bounds set to the recorded items (ignores time selection)
---    # Disarm Records subtracks before rendering
---    # Check the project is saved before changing anything (no more open undo block)
---    # Report a cancelled or failed render instead of "Render completed"
---    # Create the output folder without shell commands
+--    # Render to <records root>/<project folder>/<date> instead of the project folder
+--    # Records root folder asked once and stored per machine
 
 local reaper = reaper
 
@@ -24,6 +21,29 @@ local MSG_CFILLION_MISSING = "Optional script not found:\n\n"
 	.. "Rendering will use built-in settings (stems, $track, MP3 with REAPER default settings) instead of your \"StemsExport\" preset."
 local MSG_RENDER_FAILED = "Render cancelled or failed: some files are missing."
 
+-- Records root folder, stored per machine in reaper-extstate.ini ([BandRecord] records_root)
+local EXTSTATE_SECTION = "BandRecord"
+local EXTSTATE_RECORDS_ROOT = "records_root"
+
+-- Get the records root folder; ask for it on first use
+-- Returns: folder path, or nil if the user cancelled
+local function GetRecordsRoot()
+	local root = reaper.GetExtState(EXTSTATE_SECTION, EXTSTATE_RECORDS_ROOT)
+	if root ~= "" then
+		return root
+	end
+
+	local home = os.getenv("HOME") or os.getenv("USERPROFILE") or ""
+	local default_root = utils.JoinPath(home, "Production", "Records")
+	local ok, input = reaper.GetUserInputs("Band Record", 1, "Records root folder:,extrawidth=300,separator=|", default_root)
+	if not ok or input == "" then
+		return nil
+	end
+
+	reaper.SetExtState(EXTSTATE_SECTION, EXTSTATE_RECORDS_ROOT, input, true)
+	return input
+end
+
 -- 1-3. Deselect all, find Records track, select it + subtracks
 local records_track, records_idx = utils.SelectRecordsAndSubtracks()
 
@@ -39,12 +59,18 @@ if not render_start then
 	return
 end
 
--- The output path is relative to the project, so the project must be saved
+-- The output folder is named after the project folder, so the project must be saved
 local _, project_file = reaper.EnumProjects(-1)
 if project_file == "" then
 	reaper.ShowMessageBox(MSG_PROJECT_UNSAVED, "Render", 0)
 	return
 end
+
+local records_root = GetRecordsRoot()
+if not records_root then
+	return
+end
+local project_folder_name = utils.ParentPath(project_file):match("([^/]+)$")
 
 reaper.Undo_BeginBlock()
 
@@ -74,10 +100,9 @@ else
 	reaper.GetSetProjectInfo_String(0, "RENDER_FORMAT", "l3pm", true)
 end
 
--- Ensure output directory is our render folder (override preset if needed).
--- Pass path relative to project so REAPER doesn't prepend project path again (which caused duplicated paths).
-local render_file_relative = "Records/" .. date_str
-reaper.GetSetProjectInfo_String(0, "RENDER_FILE", render_file_relative, true)
+-- Ensure output directory is <records root>/<project folder>/<date> (override preset if needed)
+local render_dir = utils.JoinPath(records_root, project_folder_name, date_str)
+reaper.GetSetProjectInfo_String(0, "RENDER_FILE", render_dir, true)
 
 -- Render the recorded range only (custom bounds), whatever the preset or time selection says
 reaper.GetSetProjectInfo(0, "RENDER_BOUNDSFLAG", 0, true)
@@ -90,10 +115,8 @@ local target_files = {}
 for target in render_targets:gmatch("[^;]+") do
 	table.insert(target_files, target)
 end
-local render_folder = target_files[1] and utils.ParentPath(target_files[1]) or render_file_relative
-if target_files[1] then
-	reaper.RecursiveCreateDirectory(render_folder, 0)
-end
+local render_folder = target_files[1] and utils.ParentPath(target_files[1]) or render_dir
+reaper.RecursiveCreateDirectory(render_folder, 0)
 
 -- Trigger automatic render using the most recent render settings
 reaper.Main_OnCommand(41824, 0)

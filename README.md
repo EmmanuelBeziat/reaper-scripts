@@ -21,7 +21,7 @@ Set of ReaScripts for recording a band in REAPER.
 | 1    | **BR_Create Record Tracks** | Add Record group from template |
 | 2    | **BR_Record Tracks** | Arm, mute monitor, start record |
 | 3    | **BR_Remove Recorded Items** | Clear items on Record (optional) |
-| 4    | **BR_Render Tracks** | Render stems to `Records\<date>` |
+| 4    | **BR_Render Tracks** | Render stems to `<records root>/<project folder>/<date>` |
 | 5    | **BR_Delete Record Tracks** | Delete Record track and subtracks (optional) |
 
 
@@ -63,7 +63,8 @@ Use this when you want to wipe a take and record again without removing the Reco
 
 - Requires a saved project.
 - Selects the **Records** track and all its children, unmutes them and disarms the subtracks.
-- Creates a folder `Records\<YYYY-MM-DD HHhMMm>` under the project root.
+- On first use, asks for the records root folder (default `~/Production/Records`) and stores it for this machine (`reaper-extstate.ini`, section `[BandRecord]`, key `records_root`; delete it to be asked again).
+- Renders to `<records root>/<project folder name>/<YYYY-MM-DD HHhMMm>`.
 - Applies the render preset **StemsExport** (from cfillion’s “Apply render preset”) to render selected tracks as stems. If that script/preset is missing, it falls back to: selected tracks (stems), pattern `$track`, MP3 with REAPER default settings.
 - Sets the render output to the new folder and the render bounds to the time range of the recorded items (the time selection and the preset bounds are ignored), then runs the render.
 - Mutes the **Records** track again when done, and reports whether all files were written.
