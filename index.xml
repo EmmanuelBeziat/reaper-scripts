@@ -96,6 +96,14 @@ Remove: confirmation before deleting items.]]></changelog>
 		</reapack>
 	</category>
 	<category name="MIDI">
+		<reapack name="Helix Markers" type="script" desc="Convert Helix cue markers (preset, setlist, snapshot) to MIDI and back.">
+			<version name="1.0.0" author="Emmanuel Béziat" time="2026-10-12T20:00:00Z">
+				<source main="main" file="Helix_Markers to MIDI.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Helix_Markers%20to%20MIDI.lua</source>
+				<source main="main" file="Helix_MIDI to Markers.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Helix_MIDI%20to%20Markers.lua</source>
+				<source file="utils/Helix_Utils.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/utils/Helix_Utils.lua</source>
+				<changelog><![CDATA[Initial Release]]></changelog>
+			</version>
+		</reapack>
     <reapack name="Helix MIDI" type="script" desc="MIDI control of Line6 Helix Presets and snapshots in Reaper.">
       <version name="0.0.15" author="Emmanuel Béziat" time="2026-05-13T12:00:00Z">
 				<source main="Helix MIDI" file="helix-midi/helix-midi.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/helix-midi/helix-midi.lua</source>

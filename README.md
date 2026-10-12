@@ -10,6 +10,29 @@ ReaPack scripts for REAPER.
 
 ---
 
+# Helix Markers
+
+Place Line 6 Helix cues as markers instead of editing MIDI by hand. Both scripts run only when launched (preparation step, not during playback).
+
+| Script | Action |
+|--------|--------|
+| **Helix_Markers to MIDI** | Reads the markers of the **Helix** ruler lane, writes the events into the MIDI item of the **Helix Snapshots** track (created or extended to span the project), then deletes the markers |
+| **Helix_MIDI to Markers** | Moves the CC32/PC/CC69 events of **Helix Snapshots** back to markers on the **Helix** lane (created if missing) |
+
+## Marker syntax
+
+| Marker | Events (channel 4) |
+|--------|--------------------|
+| `p-2-14` | CC32 = 2 (setlist), PC = 14 |
+| `p-2-12C` | CC32 = 2, PC = 46 (Helix preset name, bank 01-32 + A-D) |
+| `p-14` | PC = 14 only |
+| `s-1` | CC69 = 1 (snapshot) |
+| `p-2-12C-s-1` | CC32, PC, CC69, sent in that order a few ticks apart |
+
+Values are raw MIDI values (setlist and snapshot 0-7). Other events of the item (e.g. CC1 expression ramps) are never touched. If one marker name is invalid, nothing is changed.
+
+---
+
 # Band Record
 
 Set of ReaScripts for recording a band in REAPER.
