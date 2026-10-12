@@ -1,8 +1,9 @@
 -- @description Helix: convert Helix MIDI events (CC32, PC, CC69) to markers on the "Helix" ruler lane
--- @version 1.0.0
+-- @version 1.1.0
 -- @author Emmanuel Béziat
 -- @changelog
---    # Initial release
+--    # Marker placed at the snapshot (no drift on round trips)
+--    # Markers colored: orange = preset, blue = snapshot, purple = both
 
 local reaper = reaper
 
@@ -42,6 +43,7 @@ local function CollectEvents(take, item)
 end
 
 -- Group close events into cues (one value per kind)
+-- The marker goes where the snapshot is (the PC sits just before it), else at the first event
 local function GroupEvents(events)
 	local groups = {}
 	for _, event in ipairs(events) do
@@ -51,6 +53,9 @@ local function GroupEvents(events)
 			table.insert(groups, group)
 		end
 		group.cue[event.kind] = event.value
+		if event.kind == "snapshot" then
+			group.position = event.position
+		end
 		table.insert(group.indices, event.index)
 	end
 	return groups
@@ -105,7 +110,7 @@ end
 for _, entry in ipairs(takes) do
 	local indices = {}
 	for _, group in ipairs(entry.cues) do
-		helix.AddLaneMarker(lane, group.position, helix.FormatMarkerName(group.cue))
+		helix.AddLaneMarker(lane, group.position, helix.FormatMarkerName(group.cue), helix.CueColor(group.cue))
 		for _, index in ipairs(group.indices) do
 			table.insert(indices, index)
 		end

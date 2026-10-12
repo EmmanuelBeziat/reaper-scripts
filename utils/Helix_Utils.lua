@@ -12,13 +12,25 @@ local Helix = {
 	MIDI_CHANNEL = 0,
 	CC_SETLIST = 32,
 	CC_SNAPSHOT = 69,
-	-- Offset between CC32, PC and CC69 of one cue, so the Helix receives them in that order
+	-- CC32 + PC are written this much before the CC69 of the same cue, so the Helix loads the preset first
 	ORDER_GAP_QN = 1 / 64,
 	-- Events closer than this are read back as one cue
 	GROUP_QN = 1 / 16,
+	-- Marker colors (r, g, b) per cue content
+	COLORS = {
+		preset = { 255, 140, 0 },
+		snapshot = { 40, 110, 230 },
+		both = { 150, 70, 200 },
+	},
 }
 
 local COMMANDS = { p = true, s = true }
+
+-- Native marker color for a cue: preset, snapshot, or both
+function Helix.CueColor(cue)
+	local rgb = Helix.COLORS[cue.preset and cue.snapshot and "both" or cue.preset and "preset" or "snapshot"]
+	return reaper.ColorToNative(rgb[1], rgb[2], rgb[3]) | 0x1000000
+end
 
 -- Find track by name
 -- Returns: track object, or nil if not found
@@ -216,9 +228,9 @@ function Helix.DeleteMarkers(markers)
 	return deleted
 end
 
--- Add a marker on a ruler lane
-function Helix.AddLaneMarker(lane, position, name)
-	local marker = reaper.AddRegionOrMarker(0, false, position, position, name, -1, 0)
+-- Add a marker on a ruler lane (color: native color | 0x1000000, or 0 for the default)
+function Helix.AddLaneMarker(lane, position, name, color)
+	local marker = reaper.AddRegionOrMarker(0, false, position, position, name, -1, color or 0)
 	reaper.SetRegionOrMarkerInfo_Value(0, marker, "I_LANENUMBER", lane)
 end
 

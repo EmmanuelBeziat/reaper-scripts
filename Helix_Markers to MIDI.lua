@@ -1,8 +1,8 @@
 -- @description Helix: convert markers of the "Helix" ruler lane to MIDI events
--- @version 1.0.0
+-- @version 1.1.0
 -- @author Emmanuel Béziat
 -- @changelog
---    # Initial release
+--    # Snapshot (CC69) exactly at the marker; CC32 + PC on one tick just before it
 
 local reaper = reaper
 
@@ -38,22 +38,25 @@ local function CoverRange(track, item, end_pos)
 	return item
 end
 
--- Insert the events of a cue in the order CC32 -> PC -> CC69
-local function InsertCue(take, cue)
+-- Insert the events of a cue: CC69 exactly at the marker; CC32 + PC on one tick (one bank/program event),
+-- just before the snapshot when there is one (on the same tick as it if the cue sits at the item start)
+local function InsertCue(take, item_start_ppq, cue)
 	local qn = reaper.TimeMap2_timeToQN(0, cue.position)
-	local function ppq(step)
-		return reaper.MIDI_GetPPQPosFromProjQN(take, qn + step * helix.ORDER_GAP_QN)
+	local cue_ppq = reaper.MIDI_GetPPQPosFromProjQN(take, qn)
+	local preset_ppq = cue_ppq
+	if cue.snapshot then
+		preset_ppq = math.max(reaper.MIDI_GetPPQPosFromProjQN(take, qn - helix.ORDER_GAP_QN), item_start_ppq)
 	end
 
 	local ch = helix.MIDI_CHANNEL
 	if cue.setlist then
-		reaper.MIDI_InsertCC(take, false, false, ppq(0), 0xB0, ch, helix.CC_SETLIST, cue.setlist)
+		reaper.MIDI_InsertCC(take, false, false, preset_ppq, 0xB0, ch, helix.CC_SETLIST, cue.setlist)
 	end
 	if cue.preset then
-		reaper.MIDI_InsertCC(take, false, false, ppq(1), 0xC0, ch, cue.preset, 0)
+		reaper.MIDI_InsertCC(take, false, false, preset_ppq, 0xC0, ch, cue.preset, 0)
 	end
 	if cue.snapshot then
-		reaper.MIDI_InsertCC(take, false, false, ppq(2), 0xB0, ch, helix.CC_SNAPSHOT, cue.snapshot)
+		reaper.MIDI_InsertCC(take, false, false, cue_ppq, 0xB0, ch, helix.CC_SNAPSHOT, cue.snapshot)
 	end
 end
 
@@ -112,9 +115,10 @@ reaper.PreventUIRefresh(1)
 local end_pos = math.max(reaper.GetProjectLength(0), cues[#cues].position + 1)
 item = CoverRange(track, item, end_pos)
 local take = reaper.GetActiveTake(item)
+local item_start_ppq = reaper.MIDI_GetPPQPosFromProjTime(take, reaper.GetMediaItemInfo_Value(item, "D_POSITION"))
 
 for _, cue in ipairs(cues) do
-	InsertCue(take, cue)
+	InsertCue(take, item_start_ppq, cue)
 end
 reaper.MIDI_Sort(take)
 

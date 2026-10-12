@@ -97,6 +97,13 @@ Remove: confirmation before deleting items.]]></changelog>
 	</category>
 	<category name="MIDI">
 		<reapack name="Helix Markers" type="script" desc="Convert Helix cue markers (preset, setlist, snapshot) to MIDI and back.">
+			<version name="1.1.0" author="Emmanuel Béziat" time="2026-10-12T23:00:00Z">
+				<source main="main" file="Helix_Markers to MIDI.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Helix_Markers%20to%20MIDI.lua</source>
+				<source main="main" file="Helix_MIDI to Markers.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Helix_MIDI%20to%20Markers.lua</source>
+				<source file="utils/Helix_Utils.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/utils/Helix_Utils.lua</source>
+				<changelog><![CDATA[Markers to MIDI: snapshot (CC69) exactly at the marker; CC32 + PC on one tick just before it (single bank/program event).
+MIDI to Markers: marker placed at the snapshot, so round trips no longer drift; markers colored (orange = preset, blue = snapshot, purple = both).]]></changelog>
+			</version>
 			<version name="1.0.0" author="Emmanuel Béziat" time="2026-10-12T20:00:00Z">
 				<source main="main" file="Helix_Markers to MIDI.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Helix_Markers%20to%20MIDI.lua</source>
 				<source main="main" file="Helix_MIDI to Markers.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Helix_MIDI%20to%20Markers.lua</source>
