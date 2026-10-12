@@ -7,7 +7,9 @@ local reaper = reaper
 local Helix = {
 	TRACK_NAME = "Helix Snapshots",
 	LANE_NAME = "Helix",
-	MIDI_CHANNEL = 3, -- Helix MIDI base channel 4 (0-based here)
+	-- Events are written on channel 1 (0-based here) and read on any channel:
+	-- the track's MIDI hardware output sets the Helix channel
+	MIDI_CHANNEL = 0,
 	CC_SETLIST = 32,
 	CC_SNAPSHOT = 69,
 	-- Offset between CC32, PC and CC69 of one cue, so the Helix receives them in that order

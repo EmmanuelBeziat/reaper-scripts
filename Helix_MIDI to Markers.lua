@@ -13,21 +13,21 @@ local helix = dofile(script_dir .. "/utils/Helix_Utils.lua")
 
 local TITLE = "Helix MIDI to markers"
 local MSG_TRACK_NOT_FOUND = "Track '" .. helix.TRACK_NAME .. "' not found!"
-local MSG_NO_EVENTS = "No Helix events (CC32, PC, CC69 on channel " .. (helix.MIDI_CHANNEL + 1) .. ") on '" .. helix.TRACK_NAME .. "'."
+local MSG_NO_EVENTS = "No Helix events (CC32, PC, CC69) on '" .. helix.TRACK_NAME .. "'."
 local MSG_LANE_FAILED = "Could not create the '" .. helix.LANE_NAME .. "' ruler lane.\nCreate it by hand, then run the script again."
 local MSG_SKIPPED = "%d cue(s) with a setlist change but no preset were left in the MIDI item (no marker syntax for them)."
 
--- Helix events (unmuted, on the Helix channel, inside the item) of a MIDI take, by position
+-- Helix events (unmuted, any channel, inside the item) of a MIDI take, by position
 local function CollectEvents(take, item)
 	local item_start = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
 	local item_end = item_start + reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
 	local events = {}
 	local _, _, cc_count = reaper.MIDI_CountEvts(take)
 	for i = 0, cc_count - 1 do
-		local _, _, muted, ppq, chanmsg, chan, msg2, msg3 = reaper.MIDI_GetCC(take, i)
+		local _, _, muted, ppq, chanmsg, _, msg2, msg3 = reaper.MIDI_GetCC(take, i)
 		local kind = helix.EventKind(chanmsg, msg2)
 		local position = reaper.MIDI_GetProjTimeFromPPQPos(take, ppq)
-		if kind and chan == helix.MIDI_CHANNEL and not muted and position >= item_start and position < item_end then
+		if kind and not muted and position >= item_start and position < item_end then
 			table.insert(events, {
 				index = i,
 				kind = kind,
