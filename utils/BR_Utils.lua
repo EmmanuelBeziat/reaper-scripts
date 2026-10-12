@@ -32,17 +32,6 @@ function EB_JoinPath(...)
 	return table.concat(result, "/")
 end
 
--- Create directory (cross-platform: Windows, macOS, Linux)
-function EB_CreateDirectory(path)
-	local normalized = EB_NormalizePath(path)
-	local os_name = reaper.GetOS()
-	if os_name == "Win32" or os_name == "Win64" then
-		os.execute('mkdir "' .. normalized .. '" 2>nul')
-	else
-		os.execute('mkdir -p "' .. normalized .. '"')
-	end
-end
-
 -- Deselect all tracks
 function EB_DeselectAllTracks()
 	for i = 0, reaper.CountTracks(0) - 1 do
@@ -135,6 +124,31 @@ function EB_AreSubtracksEmpty(parent_track, parent_idx)
 	return true
 end
 
+-- Get the time range covered by all media items of the subtracks of a parent track
+-- parent_track: parent track object
+-- parent_idx: index of the parent track
+-- Returns: start_pos, end_pos (or nil, nil if subtracks have no items)
+function EB_GetSubtracksItemsBounds(parent_track, parent_idx)
+	local start_pos, end_pos
+	local parent_depth = reaper.GetTrackDepth(parent_track)
+	for i = parent_idx + 1, reaper.CountTracks(0) - 1 do
+		local subtrack = reaper.GetTrack(0, i)
+
+		if reaper.GetTrackDepth(subtrack) <= parent_depth then
+			break
+		end
+
+		for j = 0, reaper.CountTrackMediaItems(subtrack) - 1 do
+			local item = reaper.GetTrackMediaItem(subtrack, j)
+			local item_start = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
+			local item_end = item_start + reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
+			start_pos = math.min(start_pos or item_start, item_start)
+			end_pos = math.max(end_pos or item_end, item_end)
+		end
+	end
+	return start_pos, end_pos
+end
+
 -- Arm or disarm all subtracks of a parent track for recording
 -- parent_track: parent track object
 -- parent_idx: index of the parent track
@@ -161,9 +175,9 @@ return {
 	SelectRecordsAndSubtracks = EB_SelectRecordsAndSubtracks,
 	SetSelectedTracksMute = EB_SetSelectedTracksMute,
 	AreSubtracksEmpty = EB_AreSubtracksEmpty,
+	GetSubtracksItemsBounds = EB_GetSubtracksItemsBounds,
 	SetSubtracksRecordArm = EB_SetSubtracksRecordArm,
 	NormalizePath = EB_NormalizePath,
 	ParentPath = EB_ParentPath,
 	JoinPath = EB_JoinPath,
-	CreateDirectory = EB_CreateDirectory,
 }

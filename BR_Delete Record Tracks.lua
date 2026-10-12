@@ -1,8 +1,8 @@
 -- @description Remove the Records track and all its subtracks
--- @version 1.0.0
+-- @version 1.1.0
 -- @author Emmanuel Béziat
 -- @changelog
---    # Initial commit
+--    # Delete tracks directly instead of a deferred action (undo block no longer spans a defer cycle)
 
 local reaper = reaper
 
@@ -35,9 +35,13 @@ reaper.Undo_BeginBlock()
 -- Select Records and all subtracks
 utils.SelectRecordsAndSubtracks()
 
--- Defer the remove so REAPER has one main-loop cycle to apply the selection (otherwise 40005 may not see it)
-reaper.defer(function ()
-	reaper.Main_OnCommand(40005, 0)  -- Track: Remove tracks
-	reaper.UpdateArrange()
-	reaper.Undo_EndBlock("Band Record: Delete Records tracks", -1)
-end)
+-- Delete selected tracks (reverse order so indices stay valid)
+for i = reaper.CountTracks(0) - 1, 0, -1 do
+	local track = reaper.GetTrack(0, i)
+	if reaper.IsTrackSelected(track) then
+		reaper.DeleteTrack(track)
+	end
+end
+
+reaper.UpdateArrange()
+reaper.Undo_EndBlock("Band Record: Delete Records tracks", -1)

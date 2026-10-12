@@ -1,8 +1,8 @@
 -- @description Clear all content from 'Records' group and its subtracks
--- @version 1.0.0
+-- @version 1.1.0
 -- @author Emmanuel Béziat
 -- @changelog
---    # Initial commit
+--    # Ask for confirmation before deleting recorded items
 
 local reaper = reaper
 
@@ -12,19 +12,17 @@ local script_dir = script_path:match("^(.+)/[^/]*$") or "."
 local utils = dofile(script_dir .. "/utils/BR_Utils.lua")
 
 local MSG_RECORDS_NOT_FOUND = "Track 'Records' not found!"
+local MSG_CONFIRM_DELETE = "Delete %d recorded item(s) from the Records group?\nThey will be lost if not rendered."
 
 -- 1-2. Deselect all, find Records track, select it + subtracks
-local records_track, records_idx = utils.SelectRecordsAndSubtracks()
+local records_track = utils.SelectRecordsAndSubtracks()
 
 if not records_track then
 	reaper.ShowMessageBox(MSG_RECORDS_NOT_FOUND, "Error", 0)
 	return
 end
 
-reaper.Undo_BeginBlock()
-
--- 3. Delete all items from selected tracks
--- First, collect all items in selected tracks, then delete them
+-- 3. Collect all items in selected tracks, confirm, then delete them
 local items_to_delete = {}
 for i = 0, reaper.CountTracks(0) - 1 do
 	local track = reaper.GetTrack(0, i)
@@ -36,6 +34,15 @@ for i = 0, reaper.CountTracks(0) - 1 do
 		end
 	end
 end
+
+if #items_to_delete > 0 then
+	local choice = reaper.ShowMessageBox(MSG_CONFIRM_DELETE:format(#items_to_delete), "Remove recorded items", 1)
+	if choice ~= 1 then
+		return
+	end
+end
+
+reaper.Undo_BeginBlock()
 
 -- Delete collected items
 for _, item in ipairs(items_to_delete) do

@@ -40,8 +40,9 @@ The workflow follows four main steps:
 
 ### 2. Record — **BR_Record Tracks**
 
-- Mutes the **Records** track and the **Track** track (so you don’t hear them while recording).
 - Checks that all subtracks under **Records** are empty; if not, shows an error and stops.
+- If tracks outside **Records** are armed, lists them and asks: disarm them, keep them, or cancel.
+- Mutes the **Records** track and the **Track** track (so you don’t hear them while recording).
 - Arms all subtracks of **Records** for recording.
 - Moves the edit cursor to the start of the project and starts recording.
 
@@ -52,7 +53,7 @@ Run this when you’re ready to record a take.
 ### 3. Clear and re-record (optional) — **BR_Remove Recorded Items**
 
 - Selects the **Records** track and all its children.
-- Deletes all media items on those tracks (keeps the tracks and routing).
+- Asks for confirmation, then deletes all media items on those tracks (keeps the tracks and routing).
 
 Use this when you want to wipe a take and record again without removing the Records group.
 
@@ -60,11 +61,12 @@ Use this when you want to wipe a take and record again without removing the Reco
 
 ### 4. Render stems — **BR_Render Tracks**
 
-- Selects the **Records** track and all its children and unmutes them.
+- Requires a saved project.
+- Selects the **Records** track and all its children, unmutes them and disarms the subtracks.
 - Creates a folder `Records\<YYYY-MM-DD HHhMMm>` under the project root.
-- Applies the render preset **StemsExport** (from cfillion’s “Apply render preset”) to render selected tracks as stems. If that script/preset is missing, it falls back to: selected tracks (stems), pattern `$track`, LAME MP3.
-- Sets the render output to the new folder and runs the render.
-- Mutes the **Records** track again when done.
+- Applies the render preset **StemsExport** (from cfillion’s “Apply render preset”) to render selected tracks as stems. If that script/preset is missing, it falls back to: selected tracks (stems), pattern `$track`, MP3 with REAPER default settings.
+- Sets the render output to the new folder and the render bounds to the time range of the recorded items (the time selection and the preset bounds are ignored), then runs the render.
+- Mutes the **Records** track again when done, and reports whether all files were written.
 
 **Optional:** Install [cfillion’s Apply render preset](https://github.com/ReaTeam/ReaScripts/blob/master/ReaScripts/cfillion/Apply%20render%20preset.lua) and create a preset named **StemsExport** (e.g. stems, `$track`, MP3 320) for consistent results.
 

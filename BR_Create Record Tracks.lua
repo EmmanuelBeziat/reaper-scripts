@@ -1,8 +1,8 @@
 -- @description Create Records track group from template
--- @version 1.0.0
+-- @version 1.1.0
 -- @author Emmanuel Béziat
 -- @changelog
---    # Initial commit
+--    # Move the Records group to the end with ReorderSelectedTracks (keeps sends/receives intact)
 
 local reaper = reaper
 
@@ -15,8 +15,7 @@ local MSG_RECORDS_EXISTS = "Track 'Records' already exists. No action taken."
 local MSG_RECORDS_NOT_IN_TEMPLATE = "Records track not found in template!"
 
 -- 1. Check if Records track already exists
-local records_track = utils.FindTrack("Records")
-if records_track then
+if utils.FindTrack("Records") then
 	reaper.ShowMessageBox(MSG_RECORDS_EXISTS, "Info", 0)
 	return
 end
@@ -35,38 +34,14 @@ reaper.Undo_BeginBlock()
 reaper.Main_openProject("noprompt:" .. template_path, false)
 
 -- Select Records track and all its subtracks
-local records_track, records_idx, count_selected = utils.SelectRecordsAndSubtracks()
-if not records_track then
+if not utils.SelectRecordsAndSubtracks() then
 	reaper.Undo_EndBlock("Band Record: Create Records tracks from template", -1)
 	reaper.ShowMessageBox(MSG_RECORDS_NOT_IN_TEMPLATE, "Error", 0)
 	return
 end
 
--- Collect selected tracks' state chunks (in order)
-local selected_tracks = {}
-local track_states = {}
-
-for i = 0, reaper.CountTracks(0) - 1 do
-	local track = reaper.GetTrack(0, i)
-	if reaper.IsTrackSelected(track) then
-		table.insert(selected_tracks, track)
-		local _, state = reaper.GetTrackStateChunk(track, "", false)
-		table.insert(track_states, state)
-	end
-end
-
--- Delete selected tracks from their current positions (delete in reverse order to preserve indices)
-for i = #selected_tracks, 1, -1 do
-	reaper.DeleteTrack(selected_tracks[i])
-end
-
--- Re-add them at the end (preserves parent-child relationships since we maintain order)
-for _, state in ipairs(track_states) do
-	local idx = reaper.CountTracks(0)
-	reaper.InsertTrackAtIndex(idx, false)
-	local track = reaper.GetTrack(0, idx)
-	reaper.SetTrackStateChunk(track, state, false)
-end
+-- Move them to the end (REAPER keeps folder structure and routing)
+reaper.ReorderSelectedTracks(reaper.CountTracks(0), 0)
 
 reaper.UpdateArrange()
 
