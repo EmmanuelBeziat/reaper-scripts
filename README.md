@@ -29,7 +29,7 @@ Place Line 6 Helix cues as markers instead of editing MIDI by hand. Both scripts
 | `s-1` | CC69 = 1 (snapshot) |
 | `p-2-12C-s-1` | CC69 exactly at the marker; CC32 + PC on one tick, 1/64 note before it |
 
-Values are raw MIDI values (setlist and snapshot 0-7). Markers created from MIDI are colored: orange = preset, blue = snapshot, purple = preset + snapshot. Events are written on channel 1 and read on any channel: the track's MIDI hardware output sets the Helix channel. Other events of the item (e.g. CC1 expression ramps) are never touched. If one marker name is invalid, nothing is changed.
+Values are raw MIDI values (setlist and snapshot 0-7). Markers created from MIDI are colored: orange = preset, blue = snapshot, purple = preset + snapshot. Each cue written to MIDI is labelled on the item with a take marker of the same color (`2:04C S1`, `04C`, `S0`); MIDI to Markers removes these labels and keeps other take markers. Events are written on channel 1 and read on any channel: the track's MIDI hardware output sets the Helix channel. Other events of the item (e.g. CC1 expression ramps) are never touched. If one marker name is invalid, nothing is changed.
 
 ---
 

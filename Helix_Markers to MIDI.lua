@@ -1,8 +1,8 @@
 -- @description Helix: convert markers of the "Helix" ruler lane to MIDI events
--- @version 1.1.0
+-- @version 1.2.0
 -- @author Emmanuel Béziat
 -- @changelog
---    # Snapshot (CC69) exactly at the marker; CC32 + PC on one tick just before it
+--    # Label each cue on the MIDI item with a colored take marker (e.g. "2:04C S1")
 
 local reaper = reaper
 
@@ -119,6 +119,7 @@ local item_start_ppq = reaper.MIDI_GetPPQPosFromProjTime(take, reaper.GetMediaIt
 
 for _, cue in ipairs(cues) do
 	InsertCue(take, item_start_ppq, cue)
+	helix.AddTakeLabel(take, cue.position, cue)
 end
 reaper.MIDI_Sort(take)
 

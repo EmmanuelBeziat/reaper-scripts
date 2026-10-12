@@ -132,6 +132,60 @@ function Helix.FormatMarkerName(cue)
 	return table.concat(parts, "-")
 end
 
+-- Label shown on the MIDI item for a cue: "2:04C S1", "04C", "S0"
+function Helix.FormatLabel(cue)
+	local parts = {}
+	if cue.preset then
+		local preset = Helix.PresetToName(cue.preset)
+		table.insert(parts, cue.setlist and (cue.setlist .. ":" .. preset) or preset)
+	end
+	if cue.snapshot then
+		table.insert(parts, "S" .. cue.snapshot)
+	end
+	return table.concat(parts, " ")
+end
+
+local LABEL_TOKENS = { "^%d:%d%d[A-D]$", "^%d%d[A-D]$", "^S%d$" }
+
+-- True if a take marker name has the label syntax (so only the script's own take markers are deleted)
+local function IsLabel(name)
+	if not name:match("%S") then
+		return false
+	end
+	for token in name:gmatch("%S+") do
+		local valid = false
+		for _, pattern in ipairs(LABEL_TOKENS) do
+			if token:match(pattern) then
+				valid = true
+				break
+			end
+		end
+		if not valid then
+			return false
+		end
+	end
+	return true
+end
+
+-- Add a colored take marker labelling a cue at a project position
+function Helix.AddTakeLabel(take, position, cue)
+	local item = reaper.GetMediaItemTake_Item(take)
+	local offset = position - reaper.GetMediaItemInfo_Value(item, "D_POSITION")
+	local source_pos = offset * reaper.GetMediaItemTakeInfo_Value(take, "D_PLAYRATE")
+		+ reaper.GetMediaItemTakeInfo_Value(take, "D_STARTOFFS")
+	reaper.SetTakeMarker(take, -1, Helix.FormatLabel(cue), source_pos, Helix.CueColor(cue))
+end
+
+-- Delete the cue labels of a take (other take markers are kept)
+function Helix.DeleteTakeLabels(take)
+	for i = reaper.GetNumTakeMarkers(take) - 1, 0, -1 do
+		local _, name = reaper.GetTakeMarker(take, i)
+		if IsLabel(name) then
+			reaper.DeleteTakeMarker(take, i)
+		end
+	end
+end
+
 -- Cue field matching a MIDI event, or nil if the Helix cue doesn't use it
 function Helix.EventKind(chanmsg, msg2)
 	if chanmsg == 0xC0 then

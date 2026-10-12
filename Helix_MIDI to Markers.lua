@@ -1,9 +1,8 @@
 -- @description Helix: convert Helix MIDI events (CC32, PC, CC69) to markers on the "Helix" ruler lane
--- @version 1.1.0
+-- @version 1.2.0
 -- @author Emmanuel Béziat
 -- @changelog
---    # Marker placed at the snapshot (no drift on round trips)
---    # Markers colored: orange = preset, blue = snapshot, purple = both
+--    # Delete the cue labels (take markers) of the converted items
 
 local reaper = reaper
 
@@ -106,8 +105,9 @@ if not lane then
 	return
 end
 
--- 2. Create the markers, then remove the converted events (highest index first so indices stay valid)
+-- 2. Create the markers, then remove the converted events (highest index first so indices stay valid) and their labels
 for _, entry in ipairs(takes) do
+	helix.DeleteTakeLabels(entry.take)
 	local indices = {}
 	for _, group in ipairs(entry.cues) do
 		helix.AddLaneMarker(lane, group.position, helix.FormatMarkerName(group.cue), helix.CueColor(group.cue))
