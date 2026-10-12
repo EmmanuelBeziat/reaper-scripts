@@ -1,8 +1,8 @@
 -- @description Helix: convert markers of the "Helix" ruler lane to MIDI events
--- @version 1.2.0
+-- @version 1.3.0
 -- @author Emmanuel Béziat
 -- @changelog
---    # Label each cue on the MIDI item with a colored take marker (e.g. "2:04C S1")
+--    # Refuse a first preset without setlist (unless the item already sets one earlier)
 
 local reaper = reaper
 
@@ -15,11 +15,24 @@ local TITLE = "Helix markers to MIDI"
 local MSG_TRACK_NOT_FOUND = "Track '" .. helix.TRACK_NAME .. "' not found!"
 local MSG_LANE_NOT_FOUND = "No ruler lane named '" .. helix.LANE_NAME .. "'."
 local MSG_NO_MARKERS = "No markers on the '" .. helix.LANE_NAME .. "' lane."
-local MSG_INVALID_MARKERS = "Invalid marker names, nothing was changed:\n\n%s\n\n"
+local MSG_INVALID_MARKERS = "Invalid markers, nothing was changed:\n\n%s\n\n"
 	.. "Syntax: p-<setlist>-<preset>, p-<preset>, s-<snapshot>, or combined (p-2-12C-s-1)."
 local MSG_TOO_MANY_ITEMS = "'" .. helix.TRACK_NAME .. "' holds several items. Glue or delete them so only one MIDI item remains."
 local MSG_NOT_MIDI = "The item on '" .. helix.TRACK_NAME .. "' is not a MIDI item."
 local MSG_MARKERS_LEFT = "MIDI written, but %d marker(s) could not be deleted. Delete them by hand before running the script again."
+local MSG_NO_SETLIST = ": first preset without setlist (use p-<setlist>-<preset>)"
+
+-- True if the take holds a setlist change (CC32) at or before a project position
+local function HasSetlistBefore(take, position)
+	local _, _, cc_count = reaper.MIDI_CountEvts(take)
+	for i = 0, cc_count - 1 do
+		local _, _, _, ppq, chanmsg, _, msg2 = reaper.MIDI_GetCC(take, i)
+		if helix.EventKind(chanmsg, msg2) == "setlist" and reaper.MIDI_GetProjTimeFromPPQPos(take, ppq) <= position then
+			return true
+		end
+	end
+	return false
+end
 
 -- Make sure the item spans from the project start to end_pos (create it if needed)
 -- Returns: MIDI item
@@ -78,24 +91,7 @@ if #markers == 0 then
 	return
 end
 
--- 1. Parse every marker first: nothing is written if one name is invalid
-local cues, invalid = {}, {}
-for _, marker in ipairs(markers) do
-	local cue = helix.ParseMarkerName(marker.name)
-	if cue then
-		cue.position = marker.position
-		table.insert(cues, cue)
-	else
-		table.insert(invalid, ("- \"%s\" at %s"):format(marker.name, reaper.format_timestr_pos(marker.position, "", -1)))
-	end
-end
-
-if #invalid > 0 then
-	reaper.ShowMessageBox(MSG_INVALID_MARKERS:format(table.concat(invalid, "\n")), TITLE, 0)
-	return
-end
-
--- 2. Target item: the single item of the track, or a new one
+-- 1. Target item: the single item of the track, or a new one
 local item_count = reaper.CountTrackMediaItems(track)
 if item_count > 1 then
 	reaper.ShowMessageBox(MSG_TOO_MANY_ITEMS, TITLE, 0)
@@ -105,6 +101,38 @@ end
 local item = item_count == 1 and reaper.GetTrackMediaItem(track, 0) or nil
 if item and not reaper.TakeIsMIDI(reaper.GetActiveTake(item)) then
 	reaper.ShowMessageBox(MSG_NOT_MIDI, TITLE, 0)
+	return
+end
+
+-- 2. Parse every marker first: nothing is written if one marker is invalid
+local function MarkerLine(marker, reason)
+	return ("- \"%s\" at %s%s"):format(marker.name, reaper.format_timestr_pos(marker.position, "", -1), reason or "")
+end
+
+local cues, invalid = {}, {}
+for _, marker in ipairs(markers) do
+	local cue = helix.ParseMarkerName(marker.name)
+	if cue then
+		cue.position = marker.position
+		cue.marker = marker
+		table.insert(cues, cue)
+	else
+		table.insert(invalid, MarkerLine(marker))
+	end
+end
+
+-- The first preset must select the setlist, unless the item already does it earlier
+for _, cue in ipairs(cues) do
+	if cue.preset then
+		if not cue.setlist and not (item and HasSetlistBefore(reaper.GetActiveTake(item), cue.position)) then
+			table.insert(invalid, MarkerLine(cue.marker, MSG_NO_SETLIST))
+		end
+		break
+	end
+end
+
+if #invalid > 0 then
+	reaper.ShowMessageBox(MSG_INVALID_MARKERS:format(table.concat(invalid, "\n")), TITLE, 0)
 	return
 end
 

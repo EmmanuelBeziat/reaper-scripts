@@ -16,8 +16,9 @@ Place Line 6 Helix cues as markers instead of editing MIDI by hand. Both scripts
 
 | Script | Action |
 |--------|--------|
-| **Helix_Markers to MIDI** | Reads the markers of the **Helix** ruler lane, writes the events into the MIDI item of the **Helix Snapshots** track (created or extended to span the project), then deletes the markers |
+| **Helix_Markers to MIDI** | Reads the markers of the **Helix** ruler lane, writes the events into the MIDI item of the **Helix Snapshots** track (created or extended to span the project), then deletes the markers. Refuses a first preset without setlist (unless the item already sets one earlier) |
 | **Helix_MIDI to Markers** | Moves the CC32/PC/CC69 events of **Helix Snapshots** back to markers on the **Helix** lane (created if missing) |
+| **Helix_Snap Markers to Grid** | Moves every marker of the **Helix** lane to the nearest line of the current project grid (counted from each measure start); a measure grid snaps to measure starts |
 
 ## Marker syntax
 
