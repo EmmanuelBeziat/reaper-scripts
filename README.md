@@ -44,7 +44,7 @@ The workflow follows four main steps:
 - If tracks outside **Records** are armed, lists them and asks: disarm them, keep them, or cancel.
 - Mutes the **Records** track and the **Track** track (so you don’t hear them while recording).
 - Arms all subtracks of **Records** for recording.
-- Moves the edit cursor to the start of the project and starts recording.
+- Starts recording at the current edit cursor position.
 
 Run this when you’re ready to record a take.
 

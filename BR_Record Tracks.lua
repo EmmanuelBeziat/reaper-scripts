@@ -1,7 +1,8 @@
 -- @description Prepare and start recording on Records group
--- @version 1.1.0
+-- @version 1.1.1
 -- @author Emmanuel Béziat
 -- @changelog
+--    # Start recording at the edit cursor instead of the project start
 --    # Warn when tracks outside Records are armed, with an option to disarm them
 --    # Check subtracks are empty before muting anything
 
@@ -83,9 +84,6 @@ end
 -- 3. Arm all subtracks of Records for recording
 utils.SetSubtracksRecordArm(records_track, records_idx, 1)
 
--- 4. Move cursor to project start
-reaper.SetEditCurPos(0, false, false)
-
--- 5. Start recording
+-- 4. Start recording at the edit cursor
 reaper.Undo_EndBlock("Band Record: Prepare recording", -1)
 reaper.Main_OnCommand(1013, 0)  -- Transport: Record
