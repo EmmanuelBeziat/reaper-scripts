@@ -19,17 +19,23 @@ end
 
 -- Join path segments with forward slashes (no double slashes)
 -- Nil or empty parts are skipped so they don't produce "nil" in the path
+-- A leading slash on the first segment is kept (absolute macOS/Linux paths)
 function EB_JoinPath(...)
 	local result = {}
+	local prefix = ""
 	for _, p in ipairs({ ... }) do
 		if p ~= nil then
-			local seg = EB_NormalizePath(tostring(p)):gsub("^/+", ""):gsub("/+$", "")
+			local normalized = EB_NormalizePath(tostring(p))
+			if #result == 0 and normalized:match("^/") then
+				prefix = "/"
+			end
+			local seg = normalized:gsub("^/+", ""):gsub("/+$", "")
 			if seg ~= "" then
 				table.insert(result, seg)
 			end
 		end
 	end
-	return table.concat(result, "/")
+	return prefix .. table.concat(result, "/")
 end
 
 -- Deselect all tracks
