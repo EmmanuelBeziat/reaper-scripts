@@ -10,6 +10,8 @@ local Helix = {
 	-- Events are written on channel 1 (0-based here) and read on any channel:
 	-- the track's MIDI hardware output sets the Helix channel
 	MIDI_CHANNEL = 0,
+	-- Bank MSB: sent by the Helix with every preset change, not used by these scripts
+	CC_BANK_MSB = 0,
 	CC_SETLIST = 32,
 	CC_SNAPSHOT = 69,
 	-- CC32 + PC are written this much before the CC69 of the same cue, so the Helix loads the preset first

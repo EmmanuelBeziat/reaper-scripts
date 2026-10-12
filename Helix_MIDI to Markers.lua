@@ -1,8 +1,8 @@
 -- @description Helix: convert Helix MIDI events (CC32, PC, CC69) to markers on the "Helix" ruler lane
--- @version 1.2.0
+-- @version 1.3.1
 -- @author Emmanuel Béziat
 -- @changelog
---    # Delete the cue labels (take markers) of the converted items
+--    # Delete the bank MSB events (CC0), which were left behind as extra bank/program events
 
 local reaper = reaper
 
@@ -17,17 +17,20 @@ local MSG_NO_EVENTS = "No Helix events (CC32, PC, CC69) on '" .. helix.TRACK_NAM
 local MSG_LANE_FAILED = "Could not create the '" .. helix.LANE_NAME .. "' ruler lane.\nCreate it by hand, then run the script again."
 local MSG_SKIPPED = "%d cue(s) with a setlist change but no preset were left in the MIDI item (no marker syntax for them)."
 
--- Helix events (unmuted, any channel, inside the item) of a MIDI take, by position
+-- Helix events (unmuted, any channel, inside the item) of a MIDI take, by position,
+-- and indices of every bank MSB event (CC0) of the take
 local function CollectEvents(take, item)
 	local item_start = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
 	local item_end = item_start + reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
-	local events = {}
+	local events, bank_msb = {}, {}
 	local _, _, cc_count = reaper.MIDI_CountEvts(take)
 	for i = 0, cc_count - 1 do
 		local _, _, muted, ppq, chanmsg, _, msg2, msg3 = reaper.MIDI_GetCC(take, i)
 		local kind = helix.EventKind(chanmsg, msg2)
 		local position = reaper.MIDI_GetProjTimeFromPPQPos(take, ppq)
-		if kind and not muted and position >= item_start and position < item_end then
+		if chanmsg == 0xB0 and msg2 == helix.CC_BANK_MSB then
+			table.insert(bank_msb, i)
+		elseif kind and not muted and position >= item_start and position < item_end then
 			table.insert(events, {
 				index = i,
 				kind = kind,
@@ -38,7 +41,7 @@ local function CollectEvents(take, item)
 		end
 	end
 	table.sort(events, function(a, b) return a.qn < b.qn end)
-	return events
+	return events, bank_msb
 end
 
 -- Group close events into cues (one value per kind)
@@ -74,7 +77,8 @@ for i = 0, reaper.CountTrackMediaItems(track) - 1 do
 	local take = reaper.GetActiveTake(item)
 	if take and reaper.TakeIsMIDI(take) then
 		local cues = {}
-		for _, group in ipairs(GroupEvents(CollectEvents(take, item))) do
+		local events, bank_msb = CollectEvents(take, item)
+		for _, group in ipairs(GroupEvents(events)) do
 			-- A setlist change alone has no marker syntax: leave it in the item
 			if group.cue.setlist and not group.cue.preset then
 				skipped = skipped + 1
@@ -83,7 +87,7 @@ for i = 0, reaper.CountTrackMediaItems(track) - 1 do
 			end
 		end
 		if #cues > 0 then
-			table.insert(takes, { take = take, cues = cues })
+			table.insert(takes, { take = take, cues = cues, bank_msb = bank_msb })
 			cue_count = cue_count + #cues
 		end
 	end
@@ -105,10 +109,11 @@ if not lane then
 	return
 end
 
--- 2. Create the markers, then remove the converted events (highest index first so indices stay valid) and their labels
+-- 2. Create the markers, then remove the converted events and the bank MSB events
+-- (highest index first so indices stay valid) and their labels
 for _, entry in ipairs(takes) do
 	helix.DeleteTakeLabels(entry.take)
-	local indices = {}
+	local indices = entry.bank_msb
 	for _, group in ipairs(entry.cues) do
 		helix.AddLaneMarker(lane, group.position, helix.FormatMarkerName(group.cue), helix.CueColor(group.cue))
 		for _, index in ipairs(group.indices) do
