@@ -52,46 +52,18 @@ Remove: confirmation before deleting items.]]></changelog>
 				<changelog><![CDATA[Initial Release]]></changelog>
 			</version>
 		</reapack>
-		<reapack name="Check Hardware" type="script" desc="Dockable panel to check audio/MIDI hardware.">
-			<version name="1.0.7" author="Emmanuel Béziat" time="2026-06-11T18:00:00Z">
-				<source main="main" file="Check Hardware.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Check%20Hardware.lua</source>
-				<source file="check-hardware/run.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/run.lua</source>
-				<source file="check-hardware/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/config.lua</source>
-				<source file="check-hardware/core/reaimgui.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/reaimgui.lua</source>
-				<source file="check-hardware/core/midi_output.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/midi_output.lua</source>
-				<source file="check-hardware/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/window.lua</source>
-				<source file="check-hardware/ui/midi_outputs.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/midi_outputs.lua</source>
-				<changelog><![CDATA[Fix ReaImGui font API compatibility.]]></changelog>
-			</version>
-			<version name="1.0.6" author="Emmanuel Béziat" time="2026-06-11T16:00:00Z">
-				<source main="main" file="Check Hardware.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Check%20Hardware.lua</source>
-				<source file="check-hardware/run.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/run.lua</source>
-				<source file="check-hardware/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/config.lua</source>
-				<source file="check-hardware/core/reaimgui.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/reaimgui.lua</source>
-				<source file="check-hardware/core/midi_output.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/midi_output.lua</source>
-				<source file="check-hardware/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/window.lua</source>
-				<source file="check-hardware/ui/midi_outputs.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/midi_outputs.lua</source>
-				<changelog><![CDATA[Clean UI: large bold device status, theme background, debug disabled.]]></changelog>
-			</version>
-			<version name="1.0.5" author="Emmanuel Béziat" time="2026-06-11T14:00:00Z">
-				<source main="main" file="Check Hardware.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Check%20Hardware.lua</source>
-				<source file="check-hardware/run.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/run.lua</source>
-				<source file="check-hardware/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/config.lua</source>
-				<source file="check-hardware/core/reaimgui.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/reaimgui.lua</source>
-				<source file="check-hardware/core/midi_output.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/midi_output.lua</source>
-				<source file="check-hardware/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/window.lua</source>
-				<source file="check-hardware/ui/midi_outputs.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/midi_outputs.lua</source>
-				<changelog><![CDATA[Show plugin version next to title.]]></changelog>
-			</version>
-			<version name="1.0.4" author="Emmanuel Béziat" time="2026-06-11T12:00:00Z">
-				<source main="main" file="Check Hardware.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Check%20Hardware.lua</source>
-				<source file="check-hardware/run.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/run.lua</source>
-				<source file="check-hardware/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/config.lua</source>
-				<source file="check-hardware/core/reaimgui.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/reaimgui.lua</source>
-				<source file="check-hardware/core/midi_output.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/core/midi_output.lua</source>
-				<source file="check-hardware/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/window.lua</source>
-				<source file="check-hardware/ui/midi_outputs.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/check-hardware/ui/midi_outputs.lua</source>
-				<changelog><![CDATA[Debug console log and full MIDI output list; fix status text display.]]></changelog>
+		<reapack name="Show Check" type="script" desc="Dockable pre-show checklist: audio device, Wi-Fi, Helix, lyrics script, web interfaces, Art-Net.">
+			<version name="1.0.0" author="Emmanuel Béziat" time="2026-10-14T12:00:00Z">
+				<source main="main" file="Show Check.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/Show%20Check.lua</source>
+				<source file="show-check/run.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/show-check/run.lua</source>
+				<source file="show-check/config.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/show-check/config.lua</source>
+				<source file="show-check/core/reaimgui.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/show-check/core/reaimgui.lua</source>
+				<source file="show-check/core/status.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/show-check/core/status.lua</source>
+				<source file="show-check/core/local_checks.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/show-check/core/local_checks.lua</source>
+				<source file="show-check/core/network.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/show-check/core/network.lua</source>
+				<source file="show-check/core/checks.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/show-check/core/checks.lua</source>
+				<source file="show-check/ui/window.lua">https://raw.githubusercontent.com/EmmanuelBeziat/reaper-scripts/main/show-check/ui/window.lua</source>
+				<changelog><![CDATA[Initial Release. Replaces Check Hardware.]]></changelog>
 			</version>
 		</reapack>
 	</category>

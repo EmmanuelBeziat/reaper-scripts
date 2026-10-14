@@ -18,11 +18,11 @@ local function flag(name)
 	return 0
 end
 
-function ReaImGui.ensure()
+function ReaImGui.ensure(title)
 	if not reaper.ImGui_CreateContext then
 		reaper.ShowMessageBox(
 			"Missing dependency: ReaImGui extension.\n\nInstall it via ReaPack: Extensions > ReaTeam Extensions.",
-			"Check Hardware",
+			title,
 			0
 		)
 		return false

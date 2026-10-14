@@ -10,6 +10,23 @@ ReaPack scripts for REAPER.
 
 ---
 
+# Show Check
+
+Dockable window to run before a gig or a rehearsal. Each line turns green or red; the header shows **Ready** or the number of problems. Network checks run in the background every 15 s (**Re-check** forces a run); the others refresh every second.
+
+| Check | How |
+|-------|-----|
+| **Audio device** | REAPER audio engine running, input and output device name contains `XR18` |
+| **Wi-Fi** | Router (default gateway) MAC matches the SBarricade router, on the 5GHz band; the network name is also checked when macOS shows it |
+| **Helix MIDI** | MIDI output `LINE 6 - HELIX` connected |
+| **Lyrics script** | X-Raym *Convert Lyrics track items notes for dedicated web browser interface* running; **Start** launches it |
+| **Web :8080 / :8082 / :8084** | HTTP answer from the REAPER web interfaces on `192.168.0.10` |
+| **Art-Net DMX** | `192.168.0.41` answers a ping (host reachable, Art-Net itself not tested) |
+
+Expected values are set in `show-check/config.lua`. macOS only (uses `curl`, `ping`, `ipconfig`, `system_profiler`). **Requirement:** ReaImGui (ReaTeam Extensions).
+
+---
+
 # Helix Markers
 
 Place Line 6 Helix cues as markers instead of editing MIDI by hand. Both scripts run only when launched (preparation step, not during playback).
@@ -104,4 +121,3 @@ Use this when you want to wipe a take and record again without removing the Reco
 - Deletes the Records track and all its subtracks from the project.
 
 Use this when you want to remove the Records group entirely (e.g. at the end of a session).
-
